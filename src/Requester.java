@@ -43,15 +43,16 @@ public class Requester {
 
 
             //Begin communicating with the server
-            System.out.println("Enter a message to send to the server: ");
-            message = input.nextLine();
-            out.writeObject(message);
-            out.flush();
-            System.out.println("client> " + message);
+            while(true) {
+                System.out.println("Enter a message to send to the server: ");
+                message = input.nextLine();
+                out.writeObject(message);
+                out.flush();
+                System.out.println("client> " + message);
 
-            serverResponse = (String) in.readObject();
-            System.out.println("server>" + serverResponse);
-
+                serverResponse = (String) in.readObject();
+                System.out.println("server>" + serverResponse);
+            }
 
         }
         //catch UnknownHostException and IoException

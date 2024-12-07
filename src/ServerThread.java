@@ -31,11 +31,13 @@ public class ServerThread extends Thread {
             in = new ObjectInputStream(myConnection.getInputStream());
 
             //server is ready to communicate...
-            clientMessage =  (String) in.readObject();
-            System.out.println("client message > " + clientMessage);
-            serverMessage = "Server received the message: " + clientMessage;
-            out.writeObject(serverMessage);
-            out.flush();
+            while(true) {
+                clientMessage = (String) in.readObject();
+                System.out.println("client message > " + clientMessage);
+                serverMessage = "Server received the message: " + clientMessage;
+                out.writeObject(serverMessage);
+                out.flush();
+            }
 
 
         }
