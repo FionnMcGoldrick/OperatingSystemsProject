@@ -21,6 +21,11 @@ public class Requester {
 
     }
 
+    public static void main(String[] args) {
+        Requester client = new Requester();
+        client.run();
+    }
+
     //run method
     void run() {
 
@@ -42,7 +47,7 @@ public class Requester {
             message = input.nextLine();
             out.writeObject(message);
             out.flush();
-            System.out.println("client>" + message);
+            System.out.println("client> " + message);
 
             serverResponse = (String) in.readObject();
             System.out.println("server>" + serverResponse);

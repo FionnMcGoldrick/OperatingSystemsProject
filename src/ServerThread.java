@@ -7,7 +7,8 @@ public class ServerThread extends Thread {
     private Socket myConnection;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private String message;
+    private String clientMessage;
+    private String serverMessage;
     private int result;
 
     //constructor for server thread
@@ -20,17 +21,29 @@ public class ServerThread extends Thread {
     //run main logic of server thread
     public void run(){
 
+        System.out.println("Server Thread Running");
+
         try{
+
             //server preparing to communicate
             out = new ObjectOutputStream(myConnection.getOutputStream());
             out.flush();
             in = new ObjectInputStream(myConnection.getInputStream());
 
             //server is ready to communicate...
+            clientMessage =  (String) in.readObject();
+            System.out.println("client message > " + clientMessage);
+            serverMessage = "Server received the message: " + clientMessage;
+            out.writeObject(serverMessage);
+            out.flush();
+
 
         }
-        //catch error
+        //catch errors
         catch (IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
             e.printStackTrace();
         }
         //for closing the connection

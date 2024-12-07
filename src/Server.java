@@ -17,6 +17,7 @@ public class Server {
 
             //Creating a server socket
             provider = new ServerSocket(2004, 10);
+            System.out.println("Server is running and listening on port 2004...");
 
             //looping to accept multiple connections
             while (true) {
