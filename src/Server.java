@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class Server {
 
-    public static void main(String [] args){
+    public static void main(String[] args) {
 
         //Declaring the variables
         ServerSocket provider;
@@ -13,13 +13,13 @@ public class Server {
         ServerThread handler;
 
 
-        try{
+        try {
 
             //Creating a server socket
-            provider = new ServerSocket(2004,10);
+            provider = new ServerSocket(2004, 10);
 
             //looping to accept multiple connections
-            while(true) {
+            while (true) {
                 //Creating a server socket
                 connection = provider.accept();
                 handler = new ServerThread(connection);
@@ -29,7 +29,7 @@ public class Server {
 
         }
         //catching the exception
-        catch (IOException e){
+        catch (IOException e) {
             System.out.println("Error in creating server socket");
             e.printStackTrace();
         }
