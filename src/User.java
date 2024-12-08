@@ -1,4 +1,6 @@
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     //declare variables
     private String firstName;
@@ -14,7 +16,18 @@ public class User {
         this.password = password;
     }
 
+    public void login(){
+        //login logic
+    }
 
+    public void logout(){
+        //logout logic
+    }
+
+    public void register(){
+        //register logic
+        System.out.println("User registered successfully");
+    }
 
 
 

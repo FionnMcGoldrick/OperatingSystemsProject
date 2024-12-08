@@ -21,10 +21,13 @@ public class Server {
 
             //looping to accept multiple connections
             while (true) {
+
                 //Creating a server socket
                 connection = provider.accept();
                 handler = new ServerThread(connection);
                 handler.start();
+
+
             }
 
 

@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.Scanner;
 import java.net.Socket;
 
-public class Requester {
+public class Requester{
 
     //declare variables
     Socket requestSocket;
@@ -11,8 +11,9 @@ public class Requester {
     ObjectInputStream in;
     String message;
     String serverResponse;
-    int result;
+    int choice;
     Scanner input;
+    User user;
 
     //constructor ensures every client has own instance of scanner
     Requester() {
@@ -30,6 +31,7 @@ public class Requester {
     void run() {
 
         try {
+
             //creating a socket to connect to the server
             requestSocket = new Socket("127.0.0.1", 2004);
 
@@ -44,14 +46,44 @@ public class Requester {
 
             //Begin communicating with the server
             while(true) {
-                System.out.println("Enter a message to send to the server: ");
+
+                //print menu
+                System.out.println("\n< -Healthcare Management System ->\n\n" +
+                        " 1. REGISTER\n" +
+                        " 2. LOGIN\n");
+
+                //get user choice
+                System.out.print("TYPE LOGIN OR REGISTER: ");
                 message = input.nextLine();
                 out.writeObject(message);
                 out.flush();
-                System.out.println("client> " + message);
 
-                serverResponse = (String) in.readObject();
-                System.out.println("server>" + serverResponse);
+                //if user chooses to register
+                if (message.equals("REGISTER")) {
+
+                    //get user details
+                    System.out.print("Enter your first name: ");
+                    String firstName = input.nextLine();
+                    System.out.print("Enter your second name: ");
+                    String secondName = input.nextLine();
+                    System.out.print("Enter your email: ");
+                    String email = input.nextLine();
+                    System.out.print("Enter your password: ");
+                    String password = input.nextLine();
+
+                    //create a new user object
+                    user = new User(firstName, secondName, email, password);
+
+                    //send user details to the server
+                    out.writeObject(user);
+                    out.flush();
+
+                    //get server response
+                    serverResponse = (String) in.readObject();
+                    System.out.println(serverResponse);
+
+                }
+
             }
 
         }
@@ -61,8 +93,9 @@ public class Requester {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        //catch ClassNotFoundException
+        catch (ClassNotFoundException classNotFoundException) {
+            System.err.println("Data received in unknown format");
         }
         finally {
             //closing connection

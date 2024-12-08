@@ -10,6 +10,7 @@ public class ServerThread extends Thread {
     private String clientMessage;
     private String serverMessage;
     private int result;
+    private User user;
 
     //constructor for server thread
     public ServerThread(Socket s)
@@ -21,7 +22,6 @@ public class ServerThread extends Thread {
     //run main logic of server thread
     public void run(){
 
-        System.out.println("Server Thread Running");
 
         try{
 
@@ -32,11 +32,29 @@ public class ServerThread extends Thread {
 
             //server is ready to communicate...
             while(true) {
+
+                //read the message from the client
                 clientMessage = (String) in.readObject();
-                System.out.println("client message > " + clientMessage);
-                serverMessage = "Server received the message: " + clientMessage;
-                out.writeObject(serverMessage);
-                out.flush();
+                System.out.println("Client choice: " + clientMessage);
+
+                //if client wants to register
+                if (clientMessage.equals("REGISTER")) {
+
+                    //read the user object from the client
+                    user = (User) in.readObject();
+
+                    //register the user
+                    user.register();
+
+                }
+                //if client wants to login
+                else if (clientMessage.equals("LOGIN")) {
+
+                    String username = (String) in.readObject();
+                    String password = (String) in.readObject();
+
+                }
+
             }
 
 
