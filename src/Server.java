@@ -1,11 +1,10 @@
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         //Declaring the variables
         ServerSocket provider;
@@ -26,7 +25,6 @@ public class Server {
                 connection = provider.accept();
                 handler = new ServerThread(connection);
                 handler.start();
-
 
             }
 

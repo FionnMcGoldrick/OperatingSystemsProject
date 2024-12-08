@@ -11,7 +11,7 @@ public class Requester{
     ObjectInputStream in;
     String message;
     String serverResponse;
-    int choice;
+    //int choice;
     Scanner input;
     User user;
 

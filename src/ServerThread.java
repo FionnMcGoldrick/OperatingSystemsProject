@@ -4,13 +4,9 @@ import java.net.Socket;
 public class ServerThread extends Thread {
 
     //declaring the variables for server thread
-    private Socket myConnection;
+    private final Socket myConnection;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private String clientMessage;
-    private String serverMessage;
-    private int result;
-    private User user;
 
     //constructor for server thread
     public ServerThread(Socket s)
@@ -31,28 +27,37 @@ public class ServerThread extends Thread {
             in = new ObjectInputStream(myConnection.getInputStream());
 
             //server is ready to communicate...
+            label:
             while(true) {
 
                 //read the message from the client
-                clientMessage = (String) in.readObject();
+                String clientMessage = (String) in.readObject();
                 System.out.println("Client choice: " + clientMessage);
 
                 //if client wants to register
-                if (clientMessage.equals("REGISTER")) {
+                switch (clientMessage) {
+                    case "REGISTER":
 
-                    //read the user object from the client
-                    user = (User) in.readObject();
+                        //read the user object from the client
+                        //private String serverMessage;
+                        //private int result;
+                        User user = (User) in.readObject();
 
-                    //register the user
-                    user.register();
+                        //register the user
+                        user.register();
 
-                }
-                //if client wants to login
-                else if (clientMessage.equals("LOGIN")) {
+                        break;
+                    //if client wants to log in
+                    case "LOGIN":
 
-                    String username = (String) in.readObject();
-                    String password = (String) in.readObject();
+                        //String username = (String) in.readObject();
+                        //String password = (String) in.readObject();
 
+                        break;
+                    //if client wants to exit
+                    case "EXIT":
+                        System.out.println("Client has exited");
+                        break label;
                 }
 
             }
@@ -60,10 +65,7 @@ public class ServerThread extends Thread {
 
         }
         //catch errors
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e){
+        catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
         //for closing the connection
