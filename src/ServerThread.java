@@ -1,10 +1,12 @@
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServerThread extends Thread {
 
     //declaring the variables for server thread
     private final Socket myConnection;
+    private UserManager userManager;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
@@ -16,8 +18,8 @@ public class ServerThread extends Thread {
     }
 
     //run main logic of server thread
+    @Override
     public void run(){
-
 
         try{
 
@@ -45,23 +47,26 @@ public class ServerThread extends Thread {
 
                             out.writeObject("User registered successfully");
                             out.flush();
-                        } catch (IOException e) {
+
+                        } catch (IOException | ClassNotFoundException e) {
                             System.out.println("Error in registering user");
                             e.printStackTrace();
-                        } break;
+                            break;
+                        }
+
 
 
                     //if client wants to log in
                     case "LOGIN":
 
-                        //String email = (String) in.readObject();
-                        //String password = (String) in.readObject();
+                        UserManager userManager = new UserManager();
+                        String email = (String) in.readObject();
+                        String password = (String) in.readObject();
 
+
+                        userManager.userSearch(email, password);
                         break;
-                    //if client wants to exit
-                    case "EXIT":
-                        System.out.println("Client has exited");
-                        System.exit(0);
+
                 }
 
             }

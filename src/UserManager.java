@@ -11,7 +11,6 @@ public class UserManager {
     private BufferedWriter bufferedWriter;
 
     //importing new user to UserDatabase.txt
-
     public void register(User user) {
 
         try {
@@ -53,6 +52,29 @@ public class UserManager {
             e.printStackTrace();
 
 
+        }
+
+    }
+
+
+    //check if user exists for login
+    public void userSearch(String email, String password) {
+
+        System.out.println("Searching for user...");
+        try {
+            bufferedReader = new BufferedReader(new FileReader(FILE_NAME));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] userArray = line.split(" ");
+                if (userArray.length >= 4 && userArray[2].equals(email) && userArray[3].equals(password)) {
+                    System.out.println("User exists");
+                    return;
+                }
+            }
+            System.out.println("User does not exist");
+        } catch (IOException e) {
+            System.out.println("Error in reading from file");
+            e.printStackTrace();
         }
     }
 

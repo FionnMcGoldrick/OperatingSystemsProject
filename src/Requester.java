@@ -50,7 +50,8 @@ public class Requester{
                 //print menu
                 System.out.println("\n< -Healthcare Management System ->\n\n" +
                         " 1. REGISTER\n" +
-                        " 2. LOGIN\n");
+                        " 2. LOGIN\n" +
+                        " 3. EXIT\n");
 
                 //get user choice
                 System.out.print("TYPE LOGIN OR REGISTER: ");
@@ -86,6 +87,29 @@ public class Requester{
                         e.printStackTrace();
                     }
 
+                }
+
+                //if user chooses to login
+                else if (message.equals("LOGIN")) {
+                    //get user details
+                    String email = getEmail(); //get and handle email validation
+                    String password = getPassword(); //get and handle password validation
+
+                    //send user details to the server
+                    out.writeObject(email);
+                    out.writeObject(password);
+                    out.flush();
+
+
+
+                }
+
+                else if (message.equals("EXIT")) {
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                }
+                else {
+                    System.out.println("Invalid choice. Please type LOGIN or REGISTER.");
                 }
 
             }
@@ -124,9 +148,6 @@ public class Requester{
             }
 
         }
-
-
-
 
         return email;
     }
