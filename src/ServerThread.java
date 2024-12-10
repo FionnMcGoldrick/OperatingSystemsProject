@@ -54,7 +54,7 @@ public class ServerThread extends Thread {
                     //if client wants to log in
                     case "LOGIN":
 
-                        //String username = (String) in.readObject();
+                        //String email = (String) in.readObject();
                         //String password = (String) in.readObject();
 
                         break;

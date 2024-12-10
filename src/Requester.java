@@ -66,10 +66,8 @@ public class Requester{
                     String firstName = input.nextLine();
                     System.out.print("Enter your second name: ");
                     String secondName = input.nextLine();
-                    System.out.print("Enter your email: ");
-                    String email = input.nextLine();
-                    System.out.print("Enter your password: ");
-                    String password = input.nextLine();
+                    String email = getEmail(); //get and handle email validation
+                    String password = getPassword(); //get and handle password validation
 
                     //create a new user object
                     user = new User(firstName, secondName, email, password);
@@ -110,6 +108,45 @@ public class Requester{
             }
         }
 
+    }
+
+    // method to get and validate email
+    private String getEmail() {
+        String validEmail = "@gmail.com";
+        String email;
+        while (true) {
+            System.out.print("Enter your email: ");
+            email = input.nextLine();
+            if (email.contains(validEmail)) {
+                break;
+            } else {
+                System.out.println("Invalid email. Please include @gmail.com in the email.");
+            }
+
+        }
+
+
+
+
+        return email;
+    }
+
+    //method to get and validate password
+    private String getPassword(){
+        String password;
+        while(true){
+            System.out.print("Enter your password: ");
+            password = input.nextLine();
+
+
+            // ensuring password is more than 6 characters long and contains at least one letter and one number
+            if (password.length() > 6 && password.matches(".*[a-zA-Z].*") && password.matches(".*[0-9].*")) {
+                break;
+            } else {
+                System.out.println("Password must be more than 6 characters long and contain at least one letter and one number.");
+            }
+        }
+        return password;
     }
 
 

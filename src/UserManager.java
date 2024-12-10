@@ -17,11 +17,13 @@ public class UserManager {
         try {
 
             //writing the user to the file
+            bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true));
             bufferedWriter.write(user.getFirstName() + " " + user.getSecondName() + " " + user.getEmail() + " " + user.getPassword() + "\n");
 
             //closing the file
             bufferedWriter.close();
-            System.out.println("User registered successfully");
+            System.out.println("User registered successfully\n\n< DISPLAYING ALL USERS >");
+            displayUsers();
 
         } catch (IOException e) {
             System.out.println("Error in writing to file");
@@ -34,6 +36,8 @@ public class UserManager {
     public void displayUsers() {
 
         try {
+
+            bufferedReader = new BufferedReader(new FileReader(FILE_NAME));
 
             //reading the file
             String line;
