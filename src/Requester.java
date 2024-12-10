@@ -74,28 +74,30 @@ public class Requester{
                     //create a new user object
                     user = new User(firstName, secondName, email, password);
 
-                    //send user details to the server
-                    out.writeObject(user);
-                    out.flush();
+                    try {
+                        //send user details to the server
+                        out.writeObject(user);
+                        out.flush();
 
-                    //get server response
-                    serverResponse = (String) in.readObject();
-                    System.out.println(serverResponse);
+                        //get server response
+                        serverResponse = (String) in.readObject();
+                        System.out.println(serverResponse);
+
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println("Error in registering user");
+                        e.printStackTrace();
+                    }
 
                 }
 
             }
 
         }
-        //catch UnknownHostException and IoException
+        //catch error
         catch (UnknownHostException  unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
         } catch (IOException ioException) {
             ioException.printStackTrace();
-        }
-        //catch ClassNotFoundException
-        catch (ClassNotFoundException classNotFoundException) {
-            System.err.println("Data received in unknown format");
         }
         finally {
             //closing connection

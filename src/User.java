@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User extends UserManager implements Serializable {
 
     //declare variables
     private String firstName;
@@ -20,15 +20,16 @@ public class User implements Serializable {
         //login logic
     }
 
-    public void logout(){
-        //logout logic
-    }
-
     public void register(){
-        //register logic
-        System.out.println("User registered successfully");
-    }
 
+        //Calling  the register method from UserManager
+        System.out.println("Registering User " + this.getFirstName() + "...");
+        UserManager userManager = new UserManager();
+        userManager.register(this);
+
+
+
+    }
 
 
     //getters and setters

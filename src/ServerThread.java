@@ -27,7 +27,6 @@ public class ServerThread extends Thread {
             in = new ObjectInputStream(myConnection.getInputStream());
 
             //server is ready to communicate...
-            label:
             while(true) {
 
                 //read the message from the client
@@ -37,16 +36,21 @@ public class ServerThread extends Thread {
                 //if client wants to register
                 switch (clientMessage) {
                     case "REGISTER":
+                        try {
+                            //read the user object from the client
+                            User user = (User) in.readObject();
 
-                        //read the user object from the client
-                        //private String serverMessage;
-                        //private int result;
-                        User user = (User) in.readObject();
+                            //register the user
+                            user.register();
 
-                        //register the user
-                        user.register();
+                            out.writeObject("User registered successfully");
+                            out.flush();
+                        } catch (IOException e) {
+                            System.out.println("Error in registering user");
+                            e.printStackTrace();
+                        } break;
 
-                        break;
+
                     //if client wants to log in
                     case "LOGIN":
 
@@ -57,7 +61,7 @@ public class ServerThread extends Thread {
                     //if client wants to exit
                     case "EXIT":
                         System.out.println("Client has exited");
-                        break label;
+                        System.exit(0);
                 }
 
             }
