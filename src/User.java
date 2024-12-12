@@ -17,7 +17,11 @@ public class User extends UserManager implements Serializable {
     }
 
     public void login(){
-        //login logic
+
+            //Calling the userSearch method from UserManager
+            System.out.println("Logging in User " + this.getFirstName() + "...");
+            UserManager userManager = new UserManager();
+            userManager.userSearch(this.getEmail(), this.getPassword());
     }
 
     public void register(){
@@ -27,9 +31,9 @@ public class User extends UserManager implements Serializable {
         UserManager userManager = new UserManager();
         userManager.register(this);
 
-
-
     }
+
+
 
 
     //getters and setters

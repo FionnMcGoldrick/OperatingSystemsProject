@@ -61,6 +61,7 @@ public class UserManager {
     public void userSearch(String email, String password) {
 
         System.out.println("Searching for user...");
+        System.out.flush();
         try {
             bufferedReader = new BufferedReader(new FileReader(FILE_NAME));
             String line;
