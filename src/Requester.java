@@ -105,6 +105,8 @@ public class Requester{
                     serverResponse = (String) in.readObject();
                     System.out.println(serverResponse);
 
+                    //if user is found, display user menu
+
                 }
 
                 else if (message.equals("EXIT")) {

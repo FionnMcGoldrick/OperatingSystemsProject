@@ -12,17 +12,16 @@ public class ServerThread extends Thread {
     private ObjectInputStream in;
 
     //constructor for server thread
-    public ServerThread(Socket s)
-    {
+    public ServerThread(Socket s) {
         //initializing the socket
         myConnection = s;
     }
 
     //run main logic of server thread
     @Override
-    public void run(){
+    public void run() {
 
-        try{
+        try {
 
             //server preparing to communicate
             out = new ObjectOutputStream(myConnection.getOutputStream());
@@ -30,7 +29,7 @@ public class ServerThread extends Thread {
             in = new ObjectInputStream(myConnection.getInputStream());
 
             //server is ready to communicate...
-            while(true) {
+            while (true) {
 
                 //read the message from the client
                 String clientMessage = (String) in.readObject();
@@ -56,8 +55,7 @@ public class ServerThread extends Thread {
                         }
 
 
-
-                    //if client wants to log in
+                        //if client wants to log in
                     case "LOGIN":
 
                         //read the email and password from the client
@@ -69,12 +67,11 @@ public class ServerThread extends Thread {
                         boolean userExists = userManager.userSearch(email, password);
 
                         //if user exists
-                        if(userExists){
+                        if (userExists) {
                             out.writeObject("User logged in successfully");
-
                             out.flush();
-                        }
-                        else{
+                            displayUserMenu(email);
+                        } else {
                             out.writeObject("User not found. Please register.");
                             out.flush();
                         }
@@ -88,26 +85,62 @@ public class ServerThread extends Thread {
 
         }
         //catch errors
-        catch (IOException | ClassNotFoundException e){
+        catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         //for closing the connection
-        finally{
+        finally {
 
             //closing the connection
-            try{
+            try {
                 in.close();
                 out.close();
                 myConnection.close();
             }
             //catch error
-            catch(IOException ioException){
+            catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         }
 
+
+    }//end of run method
+
+    //method for displaying a user specific menu for reports
+    private void displayUserMenu(String email) {
+
+            try {
+
+                //displaying the user menu
+                out.writeObject("Welcome " + email + "!");
+                out.writeObject("Please choose an option:\n1. Generate report\n2. View report\n3. Exit");
+
+                //read the user choice
+                String userChoice = (String) in.readObject();
+                switch (userChoice) {
+                    case "1":
+                        out.writeObject("Generating report...");
+                        out.flush();
+                        break;
+                    case "2":
+                        out.writeObject("Viewing report...");
+                        out.flush();
+                        break;
+                    case "3":
+                        out.writeObject("Exiting...");
+                        out.flush();
+                        break;
+                    default:
+                        out.writeObject("Invalid choice. Please choose 1, 2 or 3.");
+                        out.flush();
+                        break;
+                }
+
+
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
     }
-
-
 
 }
