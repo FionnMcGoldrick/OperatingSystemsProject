@@ -1,146 +1,116 @@
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class ServerThread extends Thread {
 
-    //declaring the variables for server thread
+    // Declaring the variables for server thread
     private final Socket myConnection;
-    private UserManager userManager;
-    private User user;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    //constructor for server thread
+    // Constructor for server thread
     public ServerThread(Socket s) {
-        //initializing the socket
         myConnection = s;
     }
 
-    //run main logic of server thread
+    // Run main logic of server thread
     @Override
     public void run() {
 
         try {
-
-            //server preparing to communicate
+            // Server preparing to communicate
             out = new ObjectOutputStream(myConnection.getOutputStream());
             out.flush();
             in = new ObjectInputStream(myConnection.getInputStream());
 
-            //server is ready to communicate...
+            // Server is ready to communicate...
             while (true) {
-
-                //read the message from the client
+                // Read the message from the client
                 String clientMessage = (String) in.readObject();
                 System.out.println("Client choice: " + clientMessage);
 
-                //if client wants to register
                 switch (clientMessage) {
                     case "REGISTER":
                         try {
-                            //read the user object from the client
-                            User user = (User) in.readObject();
-
-                            //register the user
-                            user.register();
-
+                            User user = (User) in.readObject(); // Read user object
+                            user.register(); // Register user
                             out.writeObject("User registered successfully");
                             out.flush();
-
                         } catch (IOException | ClassNotFoundException e) {
                             System.out.println("Error in registering user");
                             e.printStackTrace();
-                            break;
                         }
+                        break;
 
-
-                        //if client wants to log in
                     case "LOGIN":
+                        String email = (String) in.readObject(); // Read email
+                        String password = (String) in.readObject(); // Read password
 
-                        //read the email and password from the client
-                        String email = (String) in.readObject();
-                        String password = (String) in.readObject();
-
-                        //create instance of UserManager and search for user
                         UserManager userManager = new UserManager();
                         boolean userExists = userManager.userSearch(email, password);
 
-                        //if user exists
                         if (userExists) {
                             out.writeObject("User logged in successfully");
                             out.flush();
-                            displayUserMenu(email);
+                            displayUserMenu(email); // Call user menu
                         } else {
                             out.writeObject("User not found. Please register.");
                             out.flush();
                         }
-
                         break;
 
-                }
-
-            }
-
-
-        }
-        //catch errors
-        catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        //for closing the connection
-        finally {
-
-            //closing the connection
-            try {
-                in.close();
-                out.close();
-                myConnection.close();
-            }
-            //catch error
-            catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
-
-
-    }//end of run method
-
-    //method for displaying a user specific menu for reports
-    private void displayUserMenu(String email) {
-
-            try {
-
-                //displaying the user menu
-                out.writeObject("Welcome " + email + "!");
-                out.writeObject("Please choose an option:\n1. Generate report\n2. View report\n3. Exit");
-
-                //read the user choice
-                String userChoice = (String) in.readObject();
-                switch (userChoice) {
-                    case "1":
-                        out.writeObject("Generating report...");
-                        out.flush();
-                        break;
-                    case "2":
-                        out.writeObject("Viewing report...");
-                        out.flush();
-                        break;
-                    case "3":
-                        out.writeObject("Exiting...");
-                        out.flush();
-                        break;
                     default:
-                        out.writeObject("Invalid choice. Please choose 1, 2 or 3.");
+                        out.writeObject("Invalid choice. Please choose REGISTER or LOGIN.");
                         out.flush();
                         break;
                 }
-
-
-
-            } catch (IOException | ClassNotFoundException e) {
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+                if (myConnection != null) myConnection.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
     }
 
+    // Method for displaying a user-specific menu for reports
+    private void displayUserMenu(String email) {
+        try {
+            while (true) { // Menu loop
+                System.out.println("User logged in: " + email);
+                out.writeObject("Welcome " + email + "!");
+                out.writeObject("Please choose an option:\n1. CREATE\n2. VIEW\n3. EXIT");
+                out.flush();
+
+                String userChoice = (String) in.readObject(); // Read user choice
+                switch (userChoice) {
+                    case "CREATE": // Create report
+                        out.writeObject("Creating report...");
+                        out.flush();
+                        break;
+
+                    case "VIEW": // View reports
+                        out.writeObject("Viewing reports...");
+                        break;
+
+                    case "EXIT": // Logout
+                        out.writeObject("Logging out...");
+                        out.flush();
+                        return; // Exit the menu loop
+
+                    default: // Invalid choice
+                        out.writeObject("Invalid choice. Please try again.");
+                        out.flush();
+                        break;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

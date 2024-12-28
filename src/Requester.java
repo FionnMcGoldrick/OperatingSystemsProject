@@ -106,6 +106,18 @@ public class Requester{
                     System.out.println(serverResponse);
 
                     //if user is found, display user menu
+                    if(serverResponse.contains("successfully")){
+
+                        //read in user specific menu
+                        System.out.println((String) in.readObject());
+                        System.out.println((String) in.readObject());
+
+                        //handle user choice
+                        System.out.print("TYPE CREATE, VIEW OR EXIT: ");
+                        String userChoice = input.nextLine();
+                        out.writeObject(userChoice);
+                        out.flush();
+                    }
 
                 }
 
