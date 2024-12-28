@@ -7,6 +7,7 @@ public class ServerThread extends Thread {
     //declaring the variables for server thread
     private final Socket myConnection;
     private UserManager userManager;
+    private User user;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
@@ -59,12 +60,25 @@ public class ServerThread extends Thread {
                     //if client wants to log in
                     case "LOGIN":
 
-                        UserManager userManager = new UserManager();
+                        //read the email and password from the client
                         String email = (String) in.readObject();
                         String password = (String) in.readObject();
 
+                        //create instance of UserManager and search for user
+                        UserManager userManager = new UserManager();
+                        boolean userExists = userManager.userSearch(email, password);
 
-                        userManager.userSearch(email, password);
+                        //if user exists
+                        if(userExists){
+                            out.writeObject("User logged in successfully");
+
+                            out.flush();
+                        }
+                        else{
+                            out.writeObject("User not found. Please register.");
+                            out.flush();
+                        }
+
                         break;
 
                 }

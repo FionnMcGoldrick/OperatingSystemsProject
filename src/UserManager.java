@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.io.*;
 
 
@@ -31,6 +29,16 @@ public class UserManager {
 
     }
 
+    public void login(User user) {
+        System.out.println("Logging in user...");
+        System.out.flush();
+        if (userSearch(user.getEmail(), user.getPassword())) {
+            System.out.println("User logged in successfully");
+        } else {
+            System.out.println("User not found");
+        }
+    }
+
     //method for displaying all users in the database
     public void displayUsers() {
 
@@ -56,28 +64,36 @@ public class UserManager {
 
     }
 
-
-    //check if user exists for login
-    public void userSearch(String email, String password) {
-
+    public boolean userSearch(String email, String password) {
         System.out.println("Searching for user...");
-        System.out.flush();
-        try {
-            bufferedReader = new BufferedReader(new FileReader(FILE_NAME));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] userArray = line.split(" ");
-                if (userArray.length >= 4 && userArray[2].equals(email) && userArray[3].equals(password)) {
-                    System.out.println("User exists");
-                    return;
+                // Split by spaces, but limit to 4 tokens to handle names with spaces
+                String[] userArray = line.trim().split(" ", 4);
+
+                // Ensure the format is correct
+                if (userArray.length == 4) {
+                    String storedEmail = userArray[2];
+                    String storedPassword = userArray[3];
+                    if (storedEmail.equals(email) && storedPassword.equals(password)) {
+                        System.out.println("User found.");
+                        return true;
+                    }
+                } else {
+                    System.out.println("Invalid format in line: " + line);
                 }
             }
-            System.out.println("User does not exist");
         } catch (IOException e) {
             System.out.println("Error in reading from file");
             e.printStackTrace();
         }
+
+        System.out.println("User not found.");
+        return false;
     }
+
+
 
 
 }//end of class

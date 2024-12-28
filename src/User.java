@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class User extends UserManager implements Serializable {
@@ -18,23 +20,18 @@ public class User extends UserManager implements Serializable {
 
     public void login(){
 
-            //Calling the userSearch method from UserManager
-            System.out.println("Logging in User " + this.getFirstName() + "...");
-            UserManager userManager = new UserManager();
-            userManager.userSearch(this.getEmail(), this.getPassword());
+        //Calling the login method from UserManager
+        UserManager userManager = new UserManager();
+        userManager.login(this);
     }
 
     public void register(){
 
         //Calling  the register method from UserManager
-        System.out.println("Registering User " + this.getFirstName() + "...");
         UserManager userManager = new UserManager();
         userManager.register(this);
 
     }
-
-
-
 
     //getters and setters
     public String getFirstName() {

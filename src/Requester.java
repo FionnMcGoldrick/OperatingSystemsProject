@@ -60,7 +60,7 @@ public class Requester{
                 out.flush();
 
                 //if user chooses to register
-                if (message.equals("REGISTER")) {
+                if (message.equals("REGISTER") || message.equals("register")) {
 
                     //get user details
                     System.out.print("Enter your first name: ");
@@ -89,8 +89,9 @@ public class Requester{
 
                 }
 
-                //if user chooses to login
-                else if (message.equals("LOGIN")) {
+                //if user chooses to Login
+                else if (message.equals("LOGIN") || message.equals("login")) {
+
                     //get user details
                     String email = getEmail(); //get and handle email validation
                     String password = getPassword(); //get and handle password validation
@@ -100,7 +101,9 @@ public class Requester{
                     out.writeObject(password);
                     out.flush();
 
-
+                    //get server response
+                    serverResponse = (String) in.readObject();
+                    System.out.println(serverResponse);
 
                 }
 
@@ -115,12 +118,16 @@ public class Requester{
             }
 
         }
-        //catch error
+        //catch errors
         catch (UnknownHostException  unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+        catch (ClassNotFoundException classNot) {
+            System.err.println("Data received in unknown format");
+        }
+
         finally {
             //closing connection
             try {
