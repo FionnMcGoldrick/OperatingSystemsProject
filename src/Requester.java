@@ -14,6 +14,7 @@ public class Requester{
     //int choice;
     Scanner input;
     User user;
+    Report report;
 
     //constructor ensures every client has own instance of scanner
     Requester() {
@@ -117,6 +118,32 @@ public class Requester{
                         String userChoice = input.nextLine();
                         out.writeObject(userChoice);
                         out.flush();
+
+                        //if user chooses to create
+                        if(userChoice.equals("CREATE") || userChoice.equals("create")){
+
+                            //send report details
+                            System.out.print("Enter your report: \nReport type: ");
+                            String reportType = input.nextLine();
+                            System.out.print("Report ID: ");
+                            String reportID = input.nextLine();
+                            System.out.print("Report Date: ");
+                            String reportDate = input.nextLine();
+                            System.out.print("Employee ID: ");
+                            String employeeID = input.nextLine();
+                            System.out.print("Report Status: ");
+                            String reportStatus = input.nextLine();
+
+                            //send report details to the server
+                            report = new Report(reportType, reportID, reportDate, employeeID, reportStatus);
+                            out.writeObject(report);
+                            out.flush();
+
+                            //get server response
+                            serverResponse = (String) in.readObject();
+                            System.out.println(serverResponse);
+
+                        }
                     }
 
                 }

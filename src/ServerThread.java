@@ -82,9 +82,9 @@ public class ServerThread extends Thread {
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
-                System.out.println("User logged in: " + email);
-                out.writeObject("Welcome " + email + "!");
-                out.writeObject("Please choose an option:\n1. CREATE\n2. VIEW\n3. EXIT");
+                System.out.println("User logged in: " + email + "\n");
+                out.writeObject("Welcome " + email + "!\n");
+                out.writeObject("Please choose an option:\n\n1. CREATE\n2. VIEW\n3. EXIT\n");
                 out.flush();
 
                 String userChoice = (String) in.readObject(); // Read user choice
@@ -92,6 +92,7 @@ public class ServerThread extends Thread {
                     case "CREATE": // Create report
                         out.writeObject("Creating report...");
                         out.flush();
+                        reportCreate();
                         break;
 
                     case "VIEW": // View reports
@@ -113,4 +114,18 @@ public class ServerThread extends Thread {
             e.printStackTrace();
         }
     }
+
+    // Method for creating a report
+    private void reportCreate(){
+        try {
+
+            // Read report details
+            Report report = (Report) in.readObject();
+            out.writeObject("Report created successfully");
+            out.flush();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
