@@ -97,20 +97,16 @@ public class ServerThread extends Thread {
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
-                System.out.println("User logged in: " + email + "\n");
-                out.writeObject("Welcome " + email + "!\n");
-                out.writeObject("Please choose an option:\n\n1. CREATE\n2. VIEW\n3. EXIT\n");
+                out.writeObject("Welcome " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. EXIT\n\nEnter choice: ");
                 out.flush();
 
-                String userChoice = (String) in.readObject(); // Read user choice
+                // Read user choice
+                String userChoice = (String) in.readObject();
+                System.out.println("User choice: " + userChoice);
+
                 switch (userChoice) {
                     case "CREATE": // Create report
-                        out.writeObject("Creating report...");
-                        Report report = reportCreate(); // Call report creation method
-                        out.writeObject("Report created successfully.\nReport Details:\nReport Type: " + report.getReportType() +
-                                "Report ID: " + report.getReportId() + "\nReport Date: " + report.getReportDate() + "\nEmployee ID: " + report.getCreatedByEmployeeId() + "\nReport Status: " + report.getStatus());
-                        out.flush();
-
+                        createReport(email);
                         break;
 
                     case "VIEW": // View reports
@@ -134,19 +130,19 @@ public class ServerThread extends Thread {
     }
 
     // Method for creating a report
-    private Report reportCreate() {
-        try {
-            // Read report details
-            Report report = (Report) in.readObject();
-            System.out.println("Report received: " + report); // Debug statement
-            out.writeObject("Report created successfully");
-            out.flush();
-            return report;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    private void createReport(String email) throws IOException, ClassNotFoundException {
 
-        return null;
+        // Read report object from client
+        Report report = (Report) in.readObject();
+
+        // Set report creator
+        report.setCreatedByEmployeeId(email);
+
+        //ReportManager reportManager = new ReportManager();
+        //reportManager.saveReport(report);
+
+        out.writeObject("Report created successfully.\nDetails: " + report.toString());
+        out.flush();
     }
 
 }

@@ -63,7 +63,7 @@ public class Requester{
                 //if user chooses to register
                 if (message.equals("REGISTER") || message.equals("register")) {
 
-                    //get user details
+                    /*//get user details
                     System.out.print("Enter your first name: ");
                     String firstName = input.nextLine();
                     System.out.print("Enter your second name: ");
@@ -86,14 +86,18 @@ public class Requester{
                     } catch (IOException | ClassNotFoundException e) {
                         System.out.println("Error in registering user");
                         e.printStackTrace();
-                    }
+                    }*/
+
+                    handleRegistration();
+
 
                 }
 
                 //if user chooses to Login
                 else if (message.equals("LOGIN") || message.equals("login")) {
 
-                    //get user details
+                    handleLogin();
+                   /* //get user details
                     String email = getEmail(); //get and handle email validation
                     String password = getPassword(); //get and handle password validation
 
@@ -149,7 +153,7 @@ public class Requester{
                             System.out.println(serverResponse);
 
                         }
-                    }
+                    }*/
 
                 }
 
@@ -186,6 +190,100 @@ public class Requester{
         }
 
     }
+
+    //Methods
+    private void handleRegistration() throws IOException, ClassNotFoundException {
+        System.out.print("Enter first name: ");
+        String firstName = input.nextLine();
+        System.out.print("Enter last name: ");
+        String lastName = input.nextLine();
+        System.out.print("Enter email: ");
+        String email = input.nextLine();
+        System.out.print("Enter password: ");
+        String password = input.nextLine();
+
+        User user = new User(firstName, lastName, email, password);
+        out.writeObject(user);
+        out.flush();
+
+        String response = (String) in.readObject();
+        System.out.println(response);
+    }
+
+    private void handleLogin() throws IOException, ClassNotFoundException {
+
+        //Client Inputs for email and password
+        System.out.print("Enter email: ");
+        String email = input.nextLine();
+        System.out.print("Enter password: ");
+        String password = input.nextLine();
+
+        //Sending email and password to server
+        out.writeObject(email);
+        out.writeObject(password);
+        out.flush();
+
+        //server response
+        String response = (String) in.readObject();
+        System.out.println(response);
+
+        if(response.contains("successfully")) {
+            displayUserMenu();
+        }
+
+    }
+
+    // Method to display user menu
+    private void displayUserMenu() throws IOException, ClassNotFoundException {
+        while (true) {
+            // Read menu options from the server
+            System.out.println((String) in.readObject());
+
+            // Get user input
+            String choice = input.nextLine();
+            out.writeObject(choice);
+            out.flush();
+
+            // If user chooses to create a report
+            if (choice.equalsIgnoreCase("CREATE")) {
+                // Gather report details from the client
+                System.out.print("Enter Report Type (Accident Report/New Health and Safety Risk Report): ");
+                String reportType = input.nextLine();
+                System.out.print("Enter Report ID: ");
+                String reportId = input.nextLine();
+                System.out.print("Enter Report Date (YYYY-MM-DD): ");
+                String reportDate = input.nextLine();
+                System.out.print("Enter Report Status (Open/Assigned/Closed): ");
+                String status = input.nextLine();
+
+                // Create the report object
+                Report report = new Report(reportType, reportId, reportDate, "", status);
+
+                // Send the report object to the server
+                out.writeObject(report);
+                out.flush();
+
+                // Read and display server response
+                String serverResponse = (String) in.readObject();
+                System.out.println(serverResponse);
+
+            } else if (choice.equalsIgnoreCase("VIEW")) {
+                // Read and display server response
+                String serverResponse = (String) in.readObject();
+                System.out.println(serverResponse);
+            } else if (choice.equalsIgnoreCase("EXIT")) {
+                // Read and display server response
+                String serverResponse = (String) in.readObject();
+                System.out.println(serverResponse);
+                break;
+            } else {
+                // Read and display server response
+                String serverResponse = (String) in.readObject();
+                System.out.println(serverResponse);
+            }
+        }
+    }
+
 
     // method to get and validate email
     private String getEmail() {
