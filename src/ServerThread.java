@@ -30,6 +30,7 @@ public class ServerThread extends Thread {
                 String clientMessage = (String) in.readObject();
                 System.out.println("Client choice: " + clientMessage);
 
+                // Switch statement for handling client choice
                 switch (clientMessage) {
                     case "REGISTER": case "1":
                         handleRegister();

@@ -116,12 +116,13 @@ public class ReportManager {
         return ReportID;
     }
 
+    //method to ensure one of the valid report types is selected
     public String handleReportType(){
 
         while(true){
 
             // Get the report type from the user
-            System.out.print("Enter Report Type:\n\n1. Accident Report\n2. New Health\n3. Safety Risk Report): ");
+            System.out.print("\nEnter Report Type:\n\n1. Accident Report\n2. New Health\n3. Safety Risk Report\n\nENTER CHOICE: ");
             String reportType = input.nextLine();
 
             // Validate the report type
@@ -137,5 +138,29 @@ public class ReportManager {
         }
 
     }
+
+    //method to ensure a valid report status is selected
+    public String handleReportStatus(){
+
+        while(true){
+
+            //Get the report status from the user
+            System.out.print("\nEnter Report Status:\n\n1. Open\n2. Assigned\n3. Closed\n\nENTER CHOICE: ");
+            String reportStatus = input.nextLine();
+
+            // Validate the report type
+            if(reportStatus.equals("1") || reportStatus.equalsIgnoreCase("Open")){
+                return "Open";
+            } else if(reportStatus.equals("2") || reportStatus.equalsIgnoreCase("Assigned")){
+                return "Assigned";
+            } else if(reportStatus.equals("3") || reportStatus.equalsIgnoreCase("Closed")){
+                return "Closed";
+            } else {
+                System.out.println("Invalid choice. Please type a valid option");
+            }
+        }
+    }
+
+
 
 }

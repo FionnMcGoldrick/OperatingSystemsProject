@@ -177,11 +177,11 @@ public class Requester{
                 int reportId = new ReportManager().generateReportId();
                 System.out.print("Enter Report Date (YYYY-MM-DD): ");
                 String reportDate = input.nextLine();
-                System.out.print("Enter Report Status (Open/Assigned/Closed): ");
-                String status = input.nextLine();
+
+                String reportStatus = new ReportManager().handleReportStatus();
 
                 // Create the report object
-                Report report = new Report(reportType, reportId, reportDate, "", status);
+                Report report = new Report(reportType, reportId, reportDate, "", reportStatus);
 
                 // Send the report object to the server
                 out.writeObject(report);
@@ -218,7 +218,10 @@ public class Requester{
         while (true) {
             System.out.print("Enter your email: ");
             email = input.nextLine();
-            if (email.contains(validEmail)) {
+
+            //calling method to ensure email does not already exist
+            boolean emailExists = new UserManager().emailExists(email);
+            if (email.contains(validEmail) && emailExists == true) {
                 break;
             } else {
                 System.out.println("Invalid email. Please include @gmail.com in the email.");

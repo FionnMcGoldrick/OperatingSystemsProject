@@ -64,6 +64,7 @@ public class UserManager {
 
     }
 
+    //method for searching for a user in the database
     public boolean userSearch(String email, String password) {
         System.out.println("Searching for user...");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
@@ -93,6 +94,35 @@ public class UserManager {
         return false;
     }
 
+    //method for ensuring email is unique
+    public boolean emailExists(String email) {
+        // Check if email is unique
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                // Split by spaces, but limit to 4 tokens to handle names with spaces
+                String[] userArray = line.trim().split(" ", 4);
+
+                // Ensure the format is correct
+                if (userArray.length == 4) {
+                    String storedEmail = userArray[2];
+                    if (storedEmail.equals(email)) {
+                        System.out.println("Email already in use.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Invalid format in line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error in reading from file");
+            e.printStackTrace();
+
+
+        }
+
+        return true;
+    }
 
 
 
