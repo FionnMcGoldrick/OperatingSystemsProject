@@ -97,7 +97,7 @@ public class ServerThread extends Thread {
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
-                out.writeObject("Welcome " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. EXIT\n\nEnter choice: ");
+                out.writeObject("\nLOGGED IN AS:  " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. EXIT\n\nEnter choice: ");
                 out.flush();
 
                 // Read user choice
@@ -138,11 +138,27 @@ public class ServerThread extends Thread {
         // Set report creator
         report.setCreatedByEmployeeId(email);
 
-        //ReportManager reportManager = new ReportManager();
-        //reportManager.saveReport(report);
+        // Save report
+        saveReport(report);
 
-        out.writeObject("Report created successfully.\nDetails: " + report.toString());
+        out.writeObject("Report created successfully.\nDetails: " + "\nReport Type: " + report.getReportType() + "\nReport ID: " + report.getReportId() + "\nReport Date: " + report.getReportDate() + "\nCreated By: " + report.getCreatedByEmployeeId() + "\nStatus: " + report.getStatus());
         out.flush();
+    }
+
+    //saving report to txt file
+    private void saveReport(Report report) {
+
+        try{
+            //creating instance of report manager
+            ReportManager reportManager = new ReportManager();
+
+            //saving the report
+            reportManager.saveReport(report);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 }
