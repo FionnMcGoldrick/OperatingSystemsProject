@@ -202,7 +202,23 @@ public class Requester{
                 String serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);
                 break;
-            } else {
+            }
+
+            else if(choice.equalsIgnoreCase("CHANGE PASSWORD") || choice.equals("3")) {
+
+                // Get new password from user
+                String newPassword = getPassword();
+
+                // Send new password to server
+                out.writeObject(newPassword);
+                out.flush();
+
+                // Read and display server response
+                serverResponse = (String) in.readObject();
+                System.out.println(serverResponse);
+            }
+
+            else {
                 // Read and display server response
                 String serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);

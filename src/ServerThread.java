@@ -31,7 +31,7 @@ public class ServerThread extends Thread {
                 System.out.println("Client choice: " + clientMessage);
 
                 // Switch statement for handling client choice
-                switch (clientMessage) {
+                switch (clientMessage.toUpperCase()) {
                     case "REGISTER": case "1":
                         handleRegister();
                         break;
@@ -103,7 +103,7 @@ public class ServerThread extends Thread {
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
-                out.writeObject("\nLOGGED IN AS:  " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. EXIT\n\nEnter choice: ");
+                out.writeObject("\nLOGGED IN AS:  " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. CHANGE PASSWORD\n4. EXIT\n\nEnter choice: ");
                 out.flush();
 
                 // Read user choice
@@ -111,15 +111,25 @@ public class ServerThread extends Thread {
                 System.out.println("User choice: " + userChoice);
 
                 switch (userChoice) {
-                    case "CREATE": // Create report
+                    case "CREATE": case "1": // Create report
                         createReport(email);
                         break;
 
-                    case "VIEW": // View reports
+                    case "VIEW": case "2": // View reports
                         viewUserReports(email);
                         break;
 
-                    case "EXIT": // Logout
+                    case "CHANGE PASSWORD": case "3":
+                        // Read new password from client
+                        String password = (String) in.readObject();
+                        // Change password
+                        UserManager userManager = new UserManager();
+                        userManager.changePassword(email, password);
+                        out.writeObject("Password changed successfully.");
+                        out.flush();
+                        break;
+
+                    case "EXIT": case "4": // Logout
                         out.writeObject("Logging out...");
                         out.flush();
                         return; // Exit the menu loop

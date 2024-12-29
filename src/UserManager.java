@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Scanner;
 
 
 public class UserManager {
@@ -7,6 +8,9 @@ public class UserManager {
     //creating a file reader
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
+
+    //creating a scanner object
+    private Scanner input = new Scanner(System.in);
 
     //importing new user to UserDatabase.txt
     public void register(User user) {
@@ -122,6 +126,50 @@ public class UserManager {
         }
 
         return true;
+    }
+
+    //method to change password of current user logged in
+    public void changePassword(String email, String newPassword) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            StringBuilder fileContent = new StringBuilder();
+            boolean userFound = false;
+
+            // Read the file line by line
+            while ((line = bufferedReader.readLine()) != null) {
+                // Split by spaces, but limit to 4 tokens to handle names with spaces
+                String[] userArray = line.trim().split(" ", 4);
+
+                // Ensure the format is correct
+                if (userArray.length == 4) {
+                    String storedEmail = userArray[2];
+                    if (storedEmail.equals(email)) {
+                        userFound = true;
+                        // Update the password leaving all other information the same
+                        fileContent.append(userArray[0]).append(" ").append(userArray[1]).append(" ").append(storedEmail).append(" ").append(newPassword).append("\n");
+                    } else {
+                        fileContent.append(line).append("\n");
+                    }
+                } else {
+                    System.out.println("Invalid format in line: " + line);
+                }
+            }
+
+            if (userFound) {
+                try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME))) {
+                    bufferedWriter.write(fileContent.toString());
+                    System.out.println("Password changed successfully.");
+                } catch (IOException e) {
+                    System.out.println("Error in writing to file");
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error in reading from file");
+            e.printStackTrace();
+        }
     }
 
 
