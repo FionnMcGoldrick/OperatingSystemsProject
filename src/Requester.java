@@ -139,6 +139,11 @@ public class Requester{
                             out.writeObject(report);
                             out.flush();
 
+                            //print user that was just created
+                            //System.out.println("Report created successfully.\nReport Details:\nReport Type: " + report.getReportType() +
+                                  //  "Report ID: " + report.getReportId() + "\nReport Date: " + report.getReportDate() + "\nEmployee ID: " + report.getCreatedByEmployeeId() + "\nReport Status: " + report.getStatus());
+
+
                             //get server response
                             serverResponse = (String) in.readObject();
                             System.out.println(serverResponse);

@@ -31,32 +31,11 @@ public class ServerThread extends Thread {
 
                 switch (clientMessage) {
                     case "REGISTER":
-                        try {
-                            User user = (User) in.readObject(); // Read user object
-                            user.register(); // Register user
-                            out.writeObject("User registered successfully");
-                            out.flush();
-                        } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("Error in registering user");
-                            e.printStackTrace();
-                        }
+                        handleRegister();
                         break;
 
                     case "LOGIN":
-                        String email = (String) in.readObject(); // Read email
-                        String password = (String) in.readObject(); // Read password
-
-                        UserManager userManager = new UserManager();
-                        boolean userExists = userManager.userSearch(email, password);
-
-                        if (userExists) {
-                            out.writeObject("User logged in successfully");
-                            out.flush();
-                            displayUserMenu(email); // Call user menu
-                        } else {
-                            out.writeObject("User not found. Please register.");
-                            out.flush();
-                        }
+                        handleLogin();
                         break;
 
                     default:
@@ -78,6 +57,42 @@ public class ServerThread extends Thread {
         }
     }
 
+    //Method for handling user registration
+    private void handleRegister(){
+        try {
+            User user = (User) in.readObject(); // Read user object
+            user.register(); // Register user
+            out.writeObject("User registered successfully");
+            out.flush();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error in registering user");
+            e.printStackTrace();
+        }
+    }
+
+    //method for handling login
+    private void handleLogin(){
+        try {
+            String email = (String) in.readObject(); // Read email
+            String password = (String) in.readObject(); // Read password
+
+            UserManager userManager = new UserManager();
+            boolean userExists = userManager.userSearch(email, password);
+
+            if (userExists) {
+                out.writeObject("User logged in successfully");
+                out.flush();
+                displayUserMenu(email); // Call user menu
+            } else {
+                out.writeObject("User not found. Please register.");
+                out.flush();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     // Method for displaying a user-specific menu for reports
     private void displayUserMenu(String email) {
         try {
@@ -91,8 +106,11 @@ public class ServerThread extends Thread {
                 switch (userChoice) {
                     case "CREATE": // Create report
                         out.writeObject("Creating report...");
+                        Report report = reportCreate(); // Call report creation method
+                        out.writeObject("Report created successfully.\nReport Details:\nReport Type: " + report.getReportType() +
+                                "Report ID: " + report.getReportId() + "\nReport Date: " + report.getReportDate() + "\nEmployee ID: " + report.getCreatedByEmployeeId() + "\nReport Status: " + report.getStatus());
                         out.flush();
-                        reportCreate();
+
                         break;
 
                     case "VIEW": // View reports
@@ -116,16 +134,19 @@ public class ServerThread extends Thread {
     }
 
     // Method for creating a report
-    private void reportCreate(){
+    private Report reportCreate() {
         try {
-
             // Read report details
             Report report = (Report) in.readObject();
+            System.out.println("Report received: " + report); // Debug statement
             out.writeObject("Report created successfully");
             out.flush();
+            return report;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
 }
