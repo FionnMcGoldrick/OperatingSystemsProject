@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class ReportManager {
 
-    private final String reportFileName = "reports.txt";
+    public final String reportFileName = "reports.txt";
 
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -59,5 +59,6 @@ public class ReportManager {
             e.printStackTrace();
         }
     }
+
 
 }

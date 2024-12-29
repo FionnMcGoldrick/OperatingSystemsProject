@@ -62,99 +62,12 @@ public class Requester{
 
                 //if user chooses to register
                 if (message.equals("REGISTER") || message.equals("register")) {
-
-                    /*//get user details
-                    System.out.print("Enter your first name: ");
-                    String firstName = input.nextLine();
-                    System.out.print("Enter your second name: ");
-                    String secondName = input.nextLine();
-                    String email = getEmail(); //get and handle email validation
-                    String password = getPassword(); //get and handle password validation
-
-                    //create a new user object
-                    user = new User(firstName, secondName, email, password);
-
-                    try {
-                        //send user details to the server
-                        out.writeObject(user);
-                        out.flush();
-
-                        //get server response
-                        serverResponse = (String) in.readObject();
-                        System.out.println(serverResponse);
-
-                    } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("Error in registering user");
-                        e.printStackTrace();
-                    }*/
-
                     handleRegistration();
-
-
                 }
 
                 //if user chooses to Login
                 else if (message.equals("LOGIN") || message.equals("login")) {
-
                     handleLogin();
-                   /* //get user details
-                    String email = getEmail(); //get and handle email validation
-                    String password = getPassword(); //get and handle password validation
-
-                    //send user details to the server
-                    out.writeObject(email);
-                    out.writeObject(password);
-                    out.flush();
-
-                    //get server response
-                    serverResponse = (String) in.readObject();
-                    System.out.println(serverResponse);
-
-                    //if user is found, display user menu
-                    if(serverResponse.contains("successfully")){
-
-                        //read in user specific menu
-                        System.out.println((String) in.readObject());
-                        System.out.println((String) in.readObject());
-
-                        //handle user choice
-                        System.out.print("TYPE CREATE, VIEW OR EXIT: ");
-                        String userChoice = input.nextLine();
-                        out.writeObject(userChoice);
-                        out.flush();
-
-                        //if user chooses to create
-                        if(userChoice.equals("CREATE") || userChoice.equals("create")){
-
-                            //send report details
-                            System.out.print("Enter your report: \nReport type: ");
-                            String reportType = input.nextLine();
-                            System.out.print("Report ID: ");
-                            String reportID = input.nextLine();
-                            System.out.print("Report Date: ");
-                            String reportDate = input.nextLine();
-                            System.out.print("Employee ID: ");
-                            String employeeID = input.nextLine();
-                            System.out.print("Report Status: ");
-                            String reportStatus = input.nextLine();
-
-                            //send report details to the server
-                            report = new Report(reportType, reportID, reportDate, employeeID, reportStatus);
-                            out.writeObject(report);
-                            out.flush();
-
-                            //print user that was just created
-                            //System.out.println("Report created successfully.\nReport Details:\nReport Type: " + report.getReportType() +
-                                  //  "Report ID: " + report.getReportId() + "\nReport Date: " + report.getReportDate() + "\nEmployee ID: " + report.getCreatedByEmployeeId() + "\nReport Status: " + report.getStatus());
-
-
-                            //get server response
-                            serverResponse = (String) in.readObject();
-                            System.out.println(serverResponse);
-
-                        }
-                    }*/
-
                 }
 
                 else if (message.equals("EXIT")) {
@@ -193,6 +106,8 @@ public class Requester{
 
     //Methods
     private void handleRegistration() throws IOException, ClassNotFoundException {
+
+        //Client Inputs for first name, last name, email and password
         System.out.print("Enter first name: ");
         String firstName = input.nextLine();
         System.out.print("Enter last name: ");
@@ -246,6 +161,7 @@ public class Requester{
 
             // If user chooses to create a report
             if (choice.equalsIgnoreCase("CREATE")) {
+
                 // Gather report details from the client
                 System.out.print("Enter Report Type (Accident Report/New Health and Safety Risk Report): ");
                 String reportType = input.nextLine();
@@ -268,9 +184,11 @@ public class Requester{
                 System.out.println(serverResponse);
 
             } else if (choice.equalsIgnoreCase("VIEW")) {
+
                 // Read and display server response
                 String serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);
+
             } else if (choice.equalsIgnoreCase("EXIT")) {
                 // Read and display server response
                 String serverResponse = (String) in.readObject();

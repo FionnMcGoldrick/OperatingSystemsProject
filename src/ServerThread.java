@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -58,7 +59,7 @@ public class ServerThread extends Thread {
     }
 
     //Method for handling user registration
-    private void handleRegister(){
+    private void handleRegister() {
         try {
             User user = (User) in.readObject(); // Read user object
             user.register(); // Register user
@@ -71,7 +72,7 @@ public class ServerThread extends Thread {
     }
 
     //method for handling login
-    private void handleLogin(){
+    private void handleLogin() {
         try {
             String email = (String) in.readObject(); // Read email
             String password = (String) in.readObject(); // Read password
@@ -110,7 +111,7 @@ public class ServerThread extends Thread {
                         break;
 
                     case "VIEW": // View reports
-                        out.writeObject("Viewing reports...");
+                        viewReports(email);
                         break;
 
                     case "EXIT": // Logout
@@ -148,17 +149,59 @@ public class ServerThread extends Thread {
     //saving report to txt file
     private void saveReport(Report report) {
 
-        try{
+        try {
             //creating instance of report manager
             ReportManager reportManager = new ReportManager();
 
             //saving the report
             reportManager.saveReport(report);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
+    private void viewReports(String email) {
+        try {
+            // Create instance of ReportManager
+            ReportManager reportManager = new ReportManager();
+
+            // Retrieve user-specific reports
+            StringBuilder userReports = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new FileReader(reportManager.reportFileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] reportDetails = line.split(" ");
+                if (reportDetails[3].equals(email)) {
+                    userReports.append("Report Type: ").append(reportDetails[0])
+                            .append("\nReport ID: ").append(reportDetails[1])
+                            .append("\nReport Date: ").append(reportDetails[2])
+                            .append("\nCreated By: ").append(reportDetails[3])
+                            .append("\nStatus: ").append(reportDetails[4])
+                            .append("\n\n");
+                }
+            }
+            reader.close();
+
+            // Send reports or a default message if no reports are found
+            if (userReports.length() == 0) {
+                out.writeObject("No reports found for this user.");
+            } else {
+                out.writeObject("Your Reports:\n" + userReports);
+            }
+            out.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                out.writeObject("Error retrieving reports.");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
 
 }
