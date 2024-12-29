@@ -27,37 +27,49 @@ public class ReportManager {
     }
 
     //method to view specific reports based on the user email
-    public void viewUserReports(String email) {
+    public String viewUserReports(String email) {
+        StringBuilder userReports = new StringBuilder();
         try {
             bufferedReader = new BufferedReader(new FileReader(reportFileName));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] reportDetails = line.split(" ");
                 if (reportDetails[3].equals(email)) {
-                    System.out.println("Report Type: " + reportDetails[0] + "\nReport ID: " + reportDetails[1] + "\nReport Date: " + reportDetails[2] + "\nCreated By: " + reportDetails[3] + "\nStatus: " + reportDetails[4] + "\n");
+                    userReports.append("Report Type: ").append(reportDetails[0])
+                            .append("\nReport ID: ").append(reportDetails[1])
+                            .append("\nReport Date: ").append(reportDetails[2])
+                            .append("\nCreated By: ").append(reportDetails[3])
+                            .append("\nStatus: ").append(reportDetails[4])
+                            .append("\n\n");
                 }
             }
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
-
+        return userReports.length() == 0 ? "No reports found for this user." : "Your Reports:\n" + userReports;
     }
 
     //method to display all reports
-    public void displayReports() {
+    public String viewALLReports() {
+        StringBuilder allReports = new StringBuilder();
         try {
             bufferedReader = new BufferedReader(new FileReader(reportFileName));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] reportDetails = line.split(" ");
-                System.out.println("Report Type: " + reportDetails[0] + "\nReport ID: " + reportDetails[1] + "\nReport Date: " + reportDetails[2] + "\nCreated By: " + reportDetails[3] + "\nStatus: " + reportDetails[4] + "\n");
+                    allReports.append("Report Type: ").append(reportDetails[0])
+                            .append("\nReport ID: ").append(reportDetails[1])
+                            .append("\nReport Date: ").append(reportDetails[2])
+                            .append("\nCreated By: ").append(reportDetails[3])
+                            .append("\nStatus: ").append(reportDetails[4])
+                            .append("\n\n");
             }
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return allReports.length() == 0 ? "No reports found for this user." : "Your Reports:\n" + allReports;
     }
 
 

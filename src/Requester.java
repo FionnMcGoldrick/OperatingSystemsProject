@@ -52,10 +52,11 @@ public class Requester{
                 System.out.println("\n< -Healthcare Management System ->\n\n" +
                         " 1. REGISTER\n" +
                         " 2. LOGIN\n" +
-                        " 3. EXIT\n");
+                        " 3. VIEW REPORTS\n" +
+                        " 4. EXIT\n");
 
                 //get user choice
-                System.out.print("TYPE LOGIN OR REGISTER: ");
+                System.out.print("TYPE CHOICE: ");
                 message = input.nextLine();
                 out.writeObject(message);
                 out.flush();
@@ -70,6 +71,15 @@ public class Requester{
                     handleLogin();
                 }
 
+                //if user chooses to view reports
+                else if (message.equals("VIEW REPORTS")) {
+
+                    // Read and display server response
+                    String serverResponse = (String) in.readObject();
+                    System.out.println(serverResponse);
+                }
+
+                //if user chooses to exit
                 else if (message.equals("EXIT")) {
                     System.out.println("Exiting...");
                     System.exit(0);
@@ -112,11 +122,8 @@ public class Requester{
         String firstName = input.nextLine();
         System.out.print("Enter last name: ");
         String lastName = input.nextLine();
-        System.out.print("Enter email: ");
-        String email = input.nextLine();
-        System.out.print("Enter password: ");
-        String password = input.nextLine();
-
+        String email = getEmail();
+        String password = getPassword();
         User user = new User(firstName, lastName, email, password);
         out.writeObject(user);
         out.flush();

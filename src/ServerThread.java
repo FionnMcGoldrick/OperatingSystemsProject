@@ -39,8 +39,12 @@ public class ServerThread extends Thread {
                         handleLogin();
                         break;
 
+                    case "VIEW REPORTS":
+                        viewAllReports();
+                        break;
+
                     default:
-                        out.writeObject("Invalid choice. Please choose REGISTER or LOGIN.");
+                        out.writeObject("Invalid choice. Please choose a valid option.");
                         out.flush();
                         break;
                 }
@@ -111,7 +115,7 @@ public class ServerThread extends Thread {
                         break;
 
                     case "VIEW": // View reports
-                        viewReports(email);
+                        viewUserReports(email);
                         break;
 
                     case "EXIT": // Logout
@@ -162,36 +166,35 @@ public class ServerThread extends Thread {
 
     }
 
-    private void viewReports(String email) {
+    //method for calling view reports in report manager
+    private void viewAllReports(){
         try {
-            // Create instance of ReportManager
+
+            //creating instance of report manager
             ReportManager reportManager = new ReportManager();
 
-            // Retrieve user-specific reports
-            StringBuilder userReports = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new FileReader(reportManager.reportFileName));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] reportDetails = line.split(" ");
-                if (reportDetails[3].equals(email)) {
-                    userReports.append("Report Type: ").append(reportDetails[0])
-                            .append("\nReport ID: ").append(reportDetails[1])
-                            .append("\nReport Date: ").append(reportDetails[2])
-                            .append("\nCreated By: ").append(reportDetails[3])
-                            .append("\nStatus: ").append(reportDetails[4])
-                            .append("\n\n");
-                }
-            }
-            reader.close();
+            //getting all reports
+            String allReports = reportManager.viewALLReports();
 
-            // Send reports or a default message if no reports are found
-            if (userReports.length() == 0) {
-                out.writeObject("No reports found for this user.");
-            } else {
-                out.writeObject("Your Reports:\n" + userReports);
-            }
+            out.writeObject(allReports);
             out.flush();
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void viewUserReports(String email) {
+        try {
+
+            //creating instance of report manager
+            ReportManager reportManager = new ReportManager();
+
+            //getting user reports
+            String userReports = reportManager.viewUserReports(email);
+            out.writeObject(userReports);
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
             try {
