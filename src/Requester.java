@@ -62,17 +62,17 @@ public class Requester{
                 out.flush();
 
                 //if user chooses to register
-                if (message.equals("REGISTER") || message.equals("register")) {
+                if (message.equalsIgnoreCase("REGISTER") || message.equals("1")) {
                     handleRegistration();
                 }
 
                 //if user chooses to Login
-                else if (message.equals("LOGIN") || message.equals("login")) {
+                else if (message.equalsIgnoreCase("LOGIN") || message.equals("2")) {
                     handleLogin();
                 }
 
                 //if user chooses to view reports
-                else if (message.equals("VIEW REPORTS")) {
+                else if (message.equalsIgnoreCase("VIEW REPORTS") || message.equals("3")) {
 
                     // Read and display server response
                     String serverResponse = (String) in.readObject();
@@ -85,7 +85,7 @@ public class Requester{
                     System.exit(0);
                 }
                 else {
-                    System.out.println("Invalid choice. Please type LOGIN or REGISTER.");
+                    System.out.println("Invalid choice. Please type one of the choices provided.");
                 }
 
             }
@@ -118,7 +118,8 @@ public class Requester{
     private void handleRegistration() throws IOException, ClassNotFoundException {
 
         //Client Inputs for first name, last name, email and password
-        System.out.print("Enter first name: ");
+
+        System.out.print("\n<REGISTER>\nEnter first name: ");
         String firstName = input.nextLine();
         System.out.print("Enter last name: ");
         String lastName = input.nextLine();
@@ -135,7 +136,7 @@ public class Requester{
     private void handleLogin() throws IOException, ClassNotFoundException {
 
         //Client Inputs for email and password
-        System.out.print("Enter email: ");
+        System.out.print("\n<LOGIN>\nEnter email: ");
         String email = input.nextLine();
         System.out.print("Enter password: ");
         String password = input.nextLine();
@@ -169,11 +170,11 @@ public class Requester{
             // If user chooses to create a report
             if (choice.equalsIgnoreCase("CREATE")) {
 
-                // Gather report details from the client
-                System.out.print("Enter Report Type (Accident Report/New Health and Safety Risk Report): ");
-                String reportType = input.nextLine();
-                System.out.print("Enter Report ID: ");
-                String reportId = input.nextLine();
+                // Get the report type from the user
+                String reportType = new ReportManager().handleReportType();
+
+                //System.out.print("Enter Report ID: ");
+                int reportId = new ReportManager().generateReportId();
                 System.out.print("Enter Report Date (YYYY-MM-DD): ");
                 String reportDate = input.nextLine();
                 System.out.print("Enter Report Status (Open/Assigned/Closed): ");
@@ -245,6 +246,7 @@ public class Requester{
         }
         return password;
     }
+
 
 
 }

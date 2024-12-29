@@ -4,12 +4,12 @@ public class Report implements Serializable {
 
     // Declare variables
     private String reportType;
-    private String reportId;
+    private int reportId;
     private String reportDate;
     private String createdByEmployeeId;
     private String status;
 
-    public Report(String reportType, String reportId, String reportDate, String createdByEmployeeId, String status) {
+    public Report(String reportType, int reportId, String reportDate, String createdByEmployeeId, String status) {
         this.reportType = reportType;
         this.reportId = reportId;
         this.reportDate = reportDate;
@@ -30,11 +30,11 @@ public class Report implements Serializable {
         this.reportType = reportType;
     }
 
-    public String getReportId() {
+    public int getReportId() {
         return reportId;
     }
 
-    public void setReportId(String reportId) {
+    public void setReportId(int reportId) {
         this.reportId = reportId;
     }
 

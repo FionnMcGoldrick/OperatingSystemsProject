@@ -31,15 +31,15 @@ public class ServerThread extends Thread {
                 System.out.println("Client choice: " + clientMessage);
 
                 switch (clientMessage) {
-                    case "REGISTER":
+                    case "REGISTER": case "1":
                         handleRegister();
                         break;
 
-                    case "LOGIN":
+                    case "LOGIN": case "2":
                         handleLogin();
                         break;
 
-                    case "VIEW REPORTS":
+                    case "VIEW REPORTS": case "3":
                         viewAllReports();
                         break;
 
