@@ -113,13 +113,11 @@ public class UserManager {
 
                 // Ensure the format is correct
                 if (userArray.length == 7) {
-                    String storedEmail = userArray[2];
+                    String storedEmail = userArray[3];
                     if (storedEmail.equals(email)) {
                         System.out.println("Email already in use.");
                         return false;
                     }
-                } else {
-                    System.out.println("Invalid format in line: " + line  + "\n");
                 }
             }
         } catch (IOException e) {
@@ -142,15 +140,15 @@ public class UserManager {
             // Read the file line by line
             while ((line = bufferedReader.readLine()) != null) {
                 // Split by spaces, but limit to 4 tokens to handle names with spaces
-                String[] userArray = line.trim().split(",", 4);
+                String[] userArray = line.trim().split(",", 7);
 
                 // Ensure the format is correct
-                if (userArray.length == 4) {
+                if (userArray.length == 7) {
                     String storedEmail = userArray[2];
                     if (storedEmail.equals(email)) {
                         userFound = true;
                         // Update the password leaving all other information the same
-                        fileContent.append(userArray[0]).append(",").append(userArray[1]).append(",").append(storedEmail).append(",").append(newPassword).append("\n");
+                        fileContent.append(userArray[0]).append(",").append(userArray[1]).append(",").append(storedEmail).append(",").append(newPassword).append(",").append(userArray[4]).append(",").append(userArray[5]).append(",").append(userArray[6]).append("\n");
                     } else {
                         fileContent.append(line).append("\n");
                     }
@@ -207,8 +205,6 @@ public class UserManager {
                         System.out.println("Employee ID already in use.");
                         return true;
                     }
-                } else {
-                    System.err.println("Invalid line format: " + line);
                 }
             }
         } catch (IOException e) {

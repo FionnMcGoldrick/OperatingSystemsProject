@@ -1,3 +1,5 @@
 Fionn,McGoldrick,fionnmc123@gmail.com,password123,232,Health,Health Manager
-Michael,Bay,michaelbay2002@gmail.com,password123,232,Health,Manager
-fionn,mc,fionnmc202@gmail.com,password123,202,Health,Manager
+fionn,fm,fionnmcg123@gmail.com,password123,211,Health,role
+fionnmcg2@gmail.com,password123,fionnmcg999@gmail.com,password123,777,hel,jel
+Fionn,McGoldrick,fionnmcgoldrick@gmail.com,testing123,200,Finance,Worker
+Shane,Markus,shanemarkus@gmail.com,shanemarkus1,909,Finance,Manager

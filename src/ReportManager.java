@@ -16,14 +16,20 @@ public class ReportManager {
 
     //method to save report to txt file
     public void saveReport(Report report) {
-        try {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(reportFileName, true))) {
+            // Validate fields before saving
+            if (report.getReportType() == null || report.getCreatedByEmployeeId() == null || report.getStatus() == null) {
+                System.err.println("Invalid report details. Skipping save.");
+                return;
+            }
 
-            //writing the report to the file
-            bufferedWriter = new BufferedWriter(new FileWriter(reportFileName, true));
-            bufferedWriter.write(report.getReportType() + "," + report.getReportId() + "," + report.getReportDate() + "," + report.getCreatedByEmployeeId() + "," + report.getStatus() + "\n");
-            bufferedWriter.close();
-            System.out.println("Report saved successfully\n\n< DISPLAYING ALL REPORTS >");
-            //displayReports();
+            // Save report in consistent format
+            bufferedWriter.write(report.getReportType() + "," +
+                    report.getReportId() + "," +
+                    report.getReportDate() + "," +
+                    report.getCreatedByEmployeeId() + "," +
+                    report.getStatus() + "\n");
+            System.out.println("Report saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,22 +37,22 @@ public class ReportManager {
 
     //method to view specific reports based on the user email
     public String viewUserReports(String email) {
-
-        //creating a string builder to store the user reports
         StringBuilder userReports = new StringBuilder();
-
-        //reading the file
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(reportFileName))) {
             String line;
-
-            //looping through the file
             while ((line = bufferedReader.readLine()) != null) {
+                // Skip empty lines
+                if (line.trim().isEmpty()) continue;
 
-                //appending the report details to the string builder
-                String[] reportDetails = line.split(",");
+                // Validate line format
+                String[] reportDetails = line.split(",", 5);
+                if (reportDetails.length != 5) {
+                    System.err.println("Invalid format in line: " + line);
+                    continue;
+                }
 
-                //checking if the report was created by the user
-                if (reportDetails.length >= 5 && reportDetails[3].trim().equals(email.trim())) {
+                // Check if report matches user email
+                if (reportDetails[3].trim().equalsIgnoreCase(email.trim())) {
                     userReports.append("Report Type: ").append(reportDetails[0])
                             .append("\nReport ID: ").append(reportDetails[1])
                             .append("\nReport Date: ").append(reportDetails[2])
