@@ -32,17 +32,25 @@ public class ServerThread extends Thread {
 
                 // Switch statement for handling client choice
                 switch (clientMessage.toUpperCase()) {
+
+                    // Switch case for handling client choice
                     case "REGISTER": case "1":
                         handleRegister();
                         break;
+
 
                     case "LOGIN": case "2":
                         handleLogin();
                         break;
 
-                    case "VIEW REPORTS": case "3":
+                    case "VIEW ALL REPORTS": case "3":
                         viewAllReports();
                         break;
+
+                        case "EXIT": case "4":
+                        out.writeObject("Exiting...");
+                        out.flush();
+                        return;
 
                     default:
                         out.writeObject("Invalid choice. Please choose a valid option.");
@@ -98,13 +106,12 @@ public class ServerThread extends Thread {
         }
     }
 
-
     // Method for displaying a user-specific menu for reports
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
                 // Send menu options to client
-                out.writeObject("\nLOGGED IN AS: " + email + "!\n\nChoose an option:\n1. CREATE\n2. VIEW\n3. CHANGE PASSWORD\n4. EXIT\nEnter choice:");
+                out.writeObject("\nLOGGED IN AS: " + email + "!\n\nChoose an option:\n1. CREATE\n2. VIEW\n3. CHANGE PASSWORD\n4. EXIT\n");
                 out.flush();
 
                 // Read user choice
@@ -128,7 +135,7 @@ public class ServerThread extends Thread {
                         out.flush();
                         break;
 
-                    case "EXIT": case "4":
+                    case "LOGOUT": case "4":
                         out.writeObject("Logging out...");
                         out.flush();
                         return; // Exit menu loop
@@ -145,7 +152,6 @@ public class ServerThread extends Thread {
             e.printStackTrace();
         }
     }
-
 
     // Method for creating a report
     private void createReport(String email) throws IOException, ClassNotFoundException {
@@ -198,6 +204,7 @@ public class ServerThread extends Thread {
         }
     }
 
+    //method for viewing user reports
     private void viewUserReports(String email) {
         try {
 

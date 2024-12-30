@@ -74,14 +74,14 @@ public class UserManager {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                // Split by spaces, but limit to 4 tokens to handle names with spaces
+                // Split by commas, but limit to 4 tokens to handle names with commas
                 String[] userArray = line.trim().split(",", 4);
 
                 // Ensure the format is correct
                 if (userArray.length == 4) {
-                    String storedEmail = userArray[2];
-                    String storedPassword = userArray[3];
-                    if (storedEmail.equals(email) && storedPassword.equals(password)) {
+                    String storedEmail = userArray[2].trim();
+                    String storedPassword = userArray[3].trim();
+                    if (storedEmail.equals(email.trim()) && storedPassword.equals(password.trim())) {
                         System.out.println("User found.");
                         return true;
                     }

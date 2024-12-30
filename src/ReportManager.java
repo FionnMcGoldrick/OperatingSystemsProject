@@ -66,31 +66,31 @@ public class ReportManager {
 
         //creating a string builder to store all reports
         StringBuilder allReports = new StringBuilder();
-        try {
 
-            //reading the file
-            bufferedReader = new BufferedReader(new FileReader(reportFileName));
+        //reading the file
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(reportFileName))) {
             String line;
 
             //looping through the file
             while ((line = bufferedReader.readLine()) != null) {
 
                 //appending the report details to the string builder
-                String[] reportDetails = line.split(" ");
+                String[] reportDetails = line.split(",");
 
-                //appending the report details to the string builder
-                allReports.append("Report Type: ").append(reportDetails[0])
-                        .append("\nReport ID: ").append(reportDetails[1])
-                        .append("\nReport Date: ").append(reportDetails[2])
-                        .append("\nCreated By: ").append(reportDetails[3])
-                        .append("\nStatus: ").append(reportDetails[4])
-                        .append("\n\n");
+                //checking if the report details are complete
+                if (reportDetails.length >= 5) {
+                    allReports.append("\nReport Type: ").append(reportDetails[0])
+                            .append("\nReport ID: ").append(reportDetails[1])
+                            .append("\nReport Date: ").append(reportDetails[2])
+                            .append("\nCreated By: ").append(reportDetails[3])
+                            .append("\nStatus: ").append(reportDetails[4])
+                            .append("\n\n");
+                }
             }
-            bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return allReports.length() == 0 ? "No reports found." : "Your Reports:\n" + allReports;
+        return allReports.length() == 0 ? "No reports found." : "\nAll Reports:\n\n" + allReports;
     }
 
     //method to generate a random and unique three digit ID for the report

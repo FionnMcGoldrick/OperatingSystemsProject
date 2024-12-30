@@ -52,11 +52,11 @@ public class Requester{
                 System.out.println("\n< -Healthcare Management System ->\n\n" +
                         " 1. REGISTER\n" +
                         " 2. LOGIN\n" +
-                        " 3. VIEW REPORTS\n" +
+                        " 3. VIEW ALL REPORTS\n" +
                         " 4. EXIT\n");
 
                 //get user choice
-                System.out.print("TYPE CHOICE: ");
+                System.out.print("ENTER CHOICE: ");
                 message = input.nextLine();
                 out.writeObject(message);
                 out.flush();
@@ -72,7 +72,7 @@ public class Requester{
                 }
 
                 //if user chooses to view reports
-                else if (message.equalsIgnoreCase("VIEW REPORTS") || message.equals("3")) {
+                else if (message.equalsIgnoreCase("VIEW ALL REPORTS") || message.equals("3")) {
 
                     // Read and display server response
                     String serverResponse = (String) in.readObject();
@@ -80,7 +80,7 @@ public class Requester{
                 }
 
                 //if user chooses to exit
-                else if (message.equals("EXIT")) {
+                else if (message.equalsIgnoreCase("EXIT") || message.equals("4")) {
                     System.out.println("Exiting...");
                     System.exit(0);
                 }
@@ -164,6 +164,7 @@ public class Requester{
             System.out.println((String) in.readObject());
 
             // Get user input
+            System.out.print("ENTER CHOICE: ");
             String choice = input.nextLine();
             out.writeObject(choice);
             out.flush();
@@ -193,7 +194,6 @@ public class Requester{
 
                 case "CHANGE PASSWORD": case "3":
                     // Change password
-                    System.out.print("Enter new password: ");
                     String newPassword = getPassword();
                     out.writeObject(newPassword);
                     out.flush();
@@ -202,7 +202,7 @@ public class Requester{
                     System.out.println((String) in.readObject());
                     break;
 
-                case "EXIT": case "4":
+                case "LOGOUT": case "4":
                     System.out.println((String) in.readObject());
                     return;
 
@@ -212,8 +212,6 @@ public class Requester{
             }
         }
     }
-
-
 
     // method to get and validate email
     private String getEmail() {
