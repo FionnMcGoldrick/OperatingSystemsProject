@@ -119,7 +119,7 @@ public class UserManager {
                         return false;
                     }
                 } else {
-                    System.out.println("Invalid format in line: " + line);
+                    System.out.println("Invalid format in line: " + line  + "\n");
                 }
             }
         } catch (IOException e) {
@@ -180,45 +180,40 @@ public class UserManager {
     public String handleEmpID() {
         String empID;
         while (true) {
-            System.out.print("Enter your employee ID: ");
-            empID = input.nextLine();
+            System.out.print("Enter your employee ID (3 digits): ");
+            empID = input.nextLine().trim();
 
-            boolean empIDExist = employeeIDExists(empID);
-
-            // Check if the employee ID is 3 digits and unique
-            if (empID.length() == 3 && empID.matches("[0-9]+") && !empIDExist) {
-                break;
+            // Check if the employee ID is 3 digits, numeric, and unique
+            if (empID.matches("\\d{3}") && !employeeIDExists(empID)) {
+                return empID;
             } else {
-                System.out.println("Employee ID must be 3 digits and unique.");
+                System.out.println("Employee ID must be 3 digits and unique. Please try again.");
             }
         }
-        return empID;
     }
+
 
     //method to check if employee ID exists
     public boolean employeeIDExists(String empID) {
-        // Check if employee ID is unique
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                // Split by spaces, but limit to 4 tokens to handle names with spaces
-                String[] userArray = line.trim().split(",", 4);
+                String[] userArray = line.split(",", 7); // Split with a limit to handle edge cases
 
-                // Ensure the format is correct
-                if (userArray.length == 6) {
-                    String storedEmpID = userArray[5];
+                // Ensure the line is correctly formatted with at least 6 fields
+                if (userArray.length == 7) {
+                    String storedEmpID = userArray[4].trim(); // Employee ID is the 5th field (index 4)
                     if (storedEmpID.equals(empID)) {
                         System.out.println("Employee ID already in use.");
                         return true;
                     }
                 } else {
-                    System.out.println("\nInvalid formatting in line: " + line);
+                    System.err.println("Invalid line format: " + line);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error in reading from file");
+            System.out.println("Error reading the file.");
             e.printStackTrace();
-
         }
 
         return false;
