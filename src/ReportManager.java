@@ -37,14 +37,9 @@ public class ReportManager {
             //reading the file
             bufferedReader = new BufferedReader(new FileReader(reportFileName));
             String line;
-
-            //looping through the file
             while ((line = bufferedReader.readLine()) != null) {
-                String[] reportDetails = line.split(" ");
-
-                //checking if the report was created by the user
-                if (reportDetails[3].equals(email)) {
-                    //appending the report details to the string builder
+                String[] reportDetails = line.split(",");
+                if (reportDetails[3].trim().equals(email.trim())) {
                     userReports.append("Report Type: ").append(reportDetails[0])
                             .append("\nReport ID: ").append(reportDetails[1])
                             .append("\nReport Date: ").append(reportDetails[2])
@@ -57,7 +52,7 @@ public class ReportManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return userReports.length() == 0 ? "No reports found for this user." : "Your Reports:\n" + userReports;
+        return userReports.isEmpty() ? "No reports found for this user." : "Your Reports:\n" + userReports;
     }
 
     //method to display all reports
@@ -89,7 +84,7 @@ public class ReportManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return allReports.length() == 0 ? "No reports found for this user." : "Your Reports:\n" + allReports;
+        return allReports.length() == 0 ? "No reports found." : "Your Reports:\n" + allReports;
     }
 
     //method to generate a random and unique three digit ID for the report

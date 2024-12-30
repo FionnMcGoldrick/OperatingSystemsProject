@@ -19,7 +19,7 @@ public class UserManager {
 
             //writing the user to the file
             bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true));
-            bufferedWriter.write(user.getFirstName() + " " + user.getSecondName() + " " + user.getEmail() + " " + user.getPassword() + "\n");
+            bufferedWriter.write(user.getFirstName() + "," + user.getSecondName() + "," + user.getEmail() + "," + user.getPassword() + "\n");
 
             //closing the file
             bufferedWriter.close();
@@ -75,7 +75,7 @@ public class UserManager {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 // Split by spaces, but limit to 4 tokens to handle names with spaces
-                String[] userArray = line.trim().split(" ", 4);
+                String[] userArray = line.trim().split(",", 4);
 
                 // Ensure the format is correct
                 if (userArray.length == 4) {
@@ -105,7 +105,7 @@ public class UserManager {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 // Split by spaces, but limit to 4 tokens to handle names with spaces
-                String[] userArray = line.trim().split(" ", 4);
+                String[] userArray = line.trim().split(",", 4);
 
                 // Ensure the format is correct
                 if (userArray.length == 4) {
@@ -138,7 +138,7 @@ public class UserManager {
             // Read the file line by line
             while ((line = bufferedReader.readLine()) != null) {
                 // Split by spaces, but limit to 4 tokens to handle names with spaces
-                String[] userArray = line.trim().split(" ", 4);
+                String[] userArray = line.trim().split(",", 4);
 
                 // Ensure the format is correct
                 if (userArray.length == 4) {
@@ -146,7 +146,7 @@ public class UserManager {
                     if (storedEmail.equals(email)) {
                         userFound = true;
                         // Update the password leaving all other information the same
-                        fileContent.append(userArray[0]).append(" ").append(userArray[1]).append(" ").append(storedEmail).append(" ").append(newPassword).append("\n");
+                        fileContent.append(userArray[0]).append(",").append(userArray[1]).append(",").append(storedEmail).append(",").append(newPassword).append("\n");
                     } else {
                         fileContent.append(line).append("\n");
                     }

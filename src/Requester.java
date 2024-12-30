@@ -168,7 +168,7 @@ public class Requester{
             out.flush();
 
             // If user chooses to create a report
-            if (choice.equalsIgnoreCase("CREATE")) {
+            if (choice.equalsIgnoreCase("CREATE") || choice.equals("1")) {
 
                 // Get the report type from the user
                 String reportType = new ReportManager().handleReportType();
@@ -191,17 +191,11 @@ public class Requester{
                 String serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);
 
-            } else if (choice.equalsIgnoreCase("VIEW")) {
+            } else if (choice.equalsIgnoreCase("VIEW") || choice.equals("2")) {
 
                 // Read and display server response
                 String serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);
-
-            } else if (choice.equalsIgnoreCase("EXIT")) {
-                // Read and display server response
-                String serverResponse = (String) in.readObject();
-                System.out.println(serverResponse);
-                break;
             }
 
             else if(choice.equalsIgnoreCase("CHANGE PASSWORD") || choice.equals("3")) {
@@ -216,7 +210,15 @@ public class Requester{
                 // Read and display server response
                 serverResponse = (String) in.readObject();
                 System.out.println(serverResponse);
+
             }
+
+            else if (choice.equalsIgnoreCase("EXIT") || choice.equals("4")) {
+            // Read and display server response
+            String serverResponse = (String) in.readObject();
+            System.out.println(serverResponse);
+            break;
+           }
 
             else {
                 // Read and display server response

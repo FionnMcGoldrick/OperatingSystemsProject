@@ -152,7 +152,7 @@ public class ServerThread extends Thread {
         Report report = (Report) in.readObject();
 
         // Set report creator
-        report.setCreatedByEmployeeId(email);
+        report.setCreatedByEmployeeId(email.trim().toLowerCase());
 
         // Save report
         saveReport(report);
