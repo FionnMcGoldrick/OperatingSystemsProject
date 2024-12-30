@@ -103,47 +103,49 @@ public class ServerThread extends Thread {
     private void displayUserMenu(String email) {
         try {
             while (true) { // Menu loop
-                out.writeObject("\nLOGGED IN AS:  " + email + "!\n\nPlease choose an option:\n1. CREATE\n2. VIEW\n3. CHANGE PASSWORD\n4. EXIT\n\nEnter choice: ");
+                // Send menu options to client
+                out.writeObject("\nLOGGED IN AS: " + email + "!\n\nChoose an option:\n1. CREATE\n2. VIEW\n3. CHANGE PASSWORD\n4. EXIT\nEnter choice:");
                 out.flush();
 
                 // Read user choice
                 String userChoice = (String) in.readObject();
                 System.out.println("User choice: " + userChoice);
 
-                switch (userChoice) {
-                    case "CREATE": case "1": // Create report
+                switch (userChoice.toUpperCase()) {
+                    case "CREATE": case "1":
                         createReport(email);
                         break;
 
-                    case "VIEW": case "2": // View reports
+                    case "VIEW": case "2":
                         viewUserReports(email);
                         break;
 
                     case "CHANGE PASSWORD": case "3":
-                        // Read new password from client
-                        String password = (String) in.readObject();
-                        // Change password
+                        String newPassword = (String) in.readObject();
                         UserManager userManager = new UserManager();
-                        userManager.changePassword(email, password);
+                        userManager.changePassword(email, newPassword);
                         out.writeObject("Password changed successfully.");
                         out.flush();
                         break;
 
-                    case "EXIT": case "4": // Logout
+                    case "EXIT": case "4":
                         out.writeObject("Logging out...");
                         out.flush();
-                        return; // Exit the menu loop
+                        return; // Exit menu loop
 
-                    default: // Invalid choice
+                    default:
                         out.writeObject("Invalid choice. Please try again.");
                         out.flush();
                         break;
                 }
             }
+        } catch (EOFException e) {
+            System.err.println("Client disconnected unexpectedly: " + e.getMessage());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
 
     // Method for creating a report
     private void createReport(String email) throws IOException, ClassNotFoundException {

@@ -159,6 +159,7 @@ public class Requester{
     // Method to display user menu
     private void displayUserMenu() throws IOException, ClassNotFoundException {
         while (true) {
+
             // Read menu options from the server
             System.out.println((String) in.readObject());
 
@@ -167,66 +168,51 @@ public class Requester{
             out.writeObject(choice);
             out.flush();
 
-            // If user chooses to create a report
-            if (choice.equalsIgnoreCase("CREATE") || choice.equals("1")) {
+            switch (choice.toUpperCase()) {
+                case "CREATE": case "1":
+                    // Gather report details
+                    String reportType = new ReportManager().handleReportType();
+                    int reportId = new ReportManager().generateReportId();
+                    System.out.print("Enter Report Date (YYYY-MM-DD): ");
+                    String reportDate = input.nextLine();
+                    String reportStatus = new ReportManager().handleReportStatus();
 
-                // Get the report type from the user
-                String reportType = new ReportManager().handleReportType();
+                    // Create and send report
+                    Report report = new Report(reportType, reportId, reportDate, "", reportStatus);
+                    out.writeObject(report);
+                    out.flush();
 
-                //System.out.print("Enter Report ID: ");
-                int reportId = new ReportManager().generateReportId();
-                System.out.print("Enter Report Date (YYYY-MM-DD): ");
-                String reportDate = input.nextLine();
+                    // Display server response
+                    System.out.println((String) in.readObject());
+                    break;
 
-                String reportStatus = new ReportManager().handleReportStatus();
+                case "VIEW": case "2":
+                    // Display reports
+                    System.out.println((String) in.readObject());
+                    break;
 
-                // Create the report object
-                Report report = new Report(reportType, reportId, reportDate, "", reportStatus);
+                case "CHANGE PASSWORD": case "3":
+                    // Change password
+                    System.out.print("Enter new password: ");
+                    String newPassword = getPassword();
+                    out.writeObject(newPassword);
+                    out.flush();
 
-                // Send the report object to the server
-                out.writeObject(report);
-                out.flush();
+                    // Display server response
+                    System.out.println((String) in.readObject());
+                    break;
 
-                // Read and display server response
-                String serverResponse = (String) in.readObject();
-                System.out.println(serverResponse);
+                case "EXIT": case "4":
+                    System.out.println((String) in.readObject());
+                    return;
 
-            } else if (choice.equalsIgnoreCase("VIEW") || choice.equals("2")) {
-
-                // Read and display server response
-                String serverResponse = (String) in.readObject();
-                System.out.println(serverResponse);
-            }
-
-            else if(choice.equalsIgnoreCase("CHANGE PASSWORD") || choice.equals("3")) {
-
-                // Get new password from user
-                String newPassword = getPassword();
-
-                // Send new password to server
-                out.writeObject(newPassword);
-                out.flush();
-
-                // Read and display server response
-                serverResponse = (String) in.readObject();
-                System.out.println(serverResponse);
-
-            }
-
-            else if (choice.equalsIgnoreCase("EXIT") || choice.equals("4")) {
-            // Read and display server response
-            String serverResponse = (String) in.readObject();
-            System.out.println(serverResponse);
-            break;
-           }
-
-            else {
-                // Read and display server response
-                String serverResponse = (String) in.readObject();
-                System.out.println(serverResponse);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
             }
         }
     }
+
 
 
     // method to get and validate email
