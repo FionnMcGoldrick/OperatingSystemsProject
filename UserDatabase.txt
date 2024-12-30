@@ -1,3 +1,3 @@
-Fionn,McGoldrick,fionnmc123@gmail.com,password1971
-John,Doe,johndoe@gmail.com,password123
-Brian,Max,Brianm123@gmail.com,password123456789
+Fionn,McGoldrick,fionnmc123@gmail.com,password123,232,Health,Health Manager
+Michael,Bay,michaelbay2002@gmail.com,password123,232,Health,Manager
+fi,mc,testing123@gmail.com,password123,232,Health,Worker

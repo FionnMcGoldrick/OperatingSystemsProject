@@ -9,13 +9,20 @@ public class User extends UserManager implements Serializable {
     private String secondName;
     private String email;
     private String password;
+    private String employeeId;
+    private String departmentName;
+    private String role;
+
 
     //constructor to initialize the variables
-    public User(String firstName, String secondName, String email, String password) {
+    public User(String firstName, String secondName, String email, String password, String employeeId, String departmentName, String role) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
         this.password = password;
+        this.employeeId = employeeId;
+        this.departmentName = departmentName;
+        this.role = role;
     }
 
     public void login(){
@@ -65,5 +72,30 @@ public class User extends UserManager implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public String setEmployeeId(String employeeId) {
+        return employeeId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public String setDepartmentName(String departmentName) {
+        return departmentName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String setRole(String role) {
+        return role;
+    }
+
 
 }

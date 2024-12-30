@@ -115,17 +115,30 @@ public class Requester{
     }
 
     //Methods
+
+    //method to handle user registration
     private void handleRegistration() throws IOException, ClassNotFoundException {
 
-        //Client Inputs for first name, last name, email and password
-
+        //Client Inputs
         System.out.print("\n<REGISTER>\nEnter first name: ");
         String firstName = input.nextLine();
+
         System.out.print("Enter last name: ");
         String lastName = input.nextLine();
+
         String email = getEmail();
+
         String password = getPassword();
-        User user = new User(firstName, lastName, email, password);
+
+        String empID = new UserManager().handleEmpID();
+
+        System.out.print("Enter department: ");
+        String department = input.nextLine();
+
+        System.out.print("Enter role: ");
+        String role = input.nextLine();
+
+        User user = new User(firstName, lastName, email, password, empID, department, role);
         out.writeObject(user);
         out.flush();
 
@@ -133,6 +146,7 @@ public class Requester{
         System.out.println(response);
     }
 
+    //method to handle user login
     private void handleLogin() throws IOException, ClassNotFoundException {
 
         //Client Inputs for email and password
@@ -251,6 +265,9 @@ public class Requester{
         }
         return password;
     }
+
+
+
 
 
 
